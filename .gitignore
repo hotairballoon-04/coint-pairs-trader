@@ -1,0 +1,3 @@
+#ignore .idea folder and its contents
+.idea/
+*.xml
