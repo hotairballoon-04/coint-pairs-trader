@@ -3,21 +3,21 @@ from statsmodels.regression.rolling import RollingOLS
 import pandas as pd
 
 
-def fit_rolling_ols(y: pd.Series, X: pd.Series, window: int = 50) -> tuple[pd.Series, pd.Series, pd.Series]:
+def fit_rolling_ols(y: pd.Series, X: pd.Series, window: int = 50) -> tuple[pd.Series, pd.Series]:
     """
     Fit a rolling OLS regression to the given data. This computes the OLS fit of y = alpha + beta * X + residuals over
     the last `window` observations. The regression coefficients alpha and beta are returned as time series as well as
     the residuals of the regression.
     :param y:       Time series of one asset.
-    :param X:       Time serios of another asset.
+    :param X:       Time series of another asset.
     :param window:  Window size for the rolling regression.
     :return:        Regression coefficients alpha, beta and the residuals as a time series.
     """
     rolling_ols = RollingOLS(y, sm.add_constant(X), window=window).fit()
     alpha = rolling_ols.params['const']
     beta = rolling_ols.params[X.name]
-    residuals = y - (alpha + beta * X)
-    return alpha, beta, residuals
+
+    return alpha, beta
 
 
 def z_score(residuals: pd.Series, window: int = 50) -> pd.Series:

@@ -20,7 +20,6 @@ def get_pair_prices(symbols: list[str], type: str = "etf", start_date: str = "20
     if type == "etf":
         return fetch_etf_pair(symbols[0], symbols[1], start_date, end_date, interval)
     elif type == "crypto":
-        #raise NotImplementedError("Crypto pair prices fetching is not implemented yet.")
         return fetch_crypto_pair(symbols[0], symbols[1], start_date, end_date, interval)
     else:
         raise ValueError(f"Unsupported type {type}. Use 'etf' or 'crypto'.")
