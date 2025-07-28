@@ -4,7 +4,8 @@ import pandas as pd
 
 __all__ = [
     'BacktestEngine',
-    'BacktestParams'
+    'BacktestParams',
+    'compute_metrics',
 ]
 
 

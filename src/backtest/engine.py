@@ -7,6 +7,7 @@ from dataclasses import dataclass
 @dataclass
 class BacktestParams:
     stop_loss: float = 0.05
+    transaction_cost: float = 0.001  # proportion of transaction value that is charged as a fee
 
 
 class BacktestEngine:
@@ -19,7 +20,7 @@ class BacktestEngine:
     @staticmethod
     def get_position_sizes(price_a: float, price_b: float, beta_val):
         size_a = 1.0
-        beta_val = 1.0 if beta_val is None else beta_val
+        beta_val = 1.0 if (beta_val is None or np.isnan(beta_val)) else beta_val
         size_b = (price_a / price_b) * beta_val * size_a
         return size_a, size_b
 
@@ -30,6 +31,7 @@ class BacktestEngine:
         df['pos_b'] = 0.0
         df['pnl'] = 0.0
         df['position'] = 0        # 0 flat, +1 long-spread, −1 short-spread
+        df['transaction_costs'] = 0.0
 
         state = 0
         size_a = size_b = 0.0
@@ -37,7 +39,7 @@ class BacktestEngine:
 
         for t in df.index:
             pa, pb = df.at[t, self.sym_a], df.at[t, self.sym_b]
-            beta_t = None if beta is None else beta.at[t]
+            beta_t = None if (beta.at[t] is None or np.isnan(beta.at[t])) else beta.at[t]
 
             if state != 0:
                 sign = 1 if state == 1 else -1
@@ -60,9 +62,10 @@ class BacktestEngine:
 
                 if state != 0:
                     size_a_abs, size_b_abs = self.get_position_sizes(pa, pb, beta_t)
-                    size_a = state * size_a_abs      # +A or −A
-                    size_b = -state * size_b_abs      # −B or +B
+                    size_a = state * size_a_abs
+                    size_b = -state * size_b_abs
                     entry_pa, entry_pb = pa, pb
+                    df.at[t, 'transaction_costs'] -= self.params.transaction_cost * (abs(size_a) * pa + abs(size_b) * pb)
 
             df.at[t, 'pos_a'] = size_a
             df.at[t, 'pos_b'] = size_b
