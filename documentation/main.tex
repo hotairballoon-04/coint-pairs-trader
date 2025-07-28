@@ -5,10 +5,11 @@
 \usepackage{algorithm}
 \usepackage{algpseudocode}
 
+
 \usepackage[backend=biber,style=numeric, sorting=none]{biblatex}
 \addbibresource{references.bib}
 
-\graphicspath{{../experiments/figs}}
+\graphicspath{{../experiments/figs}{../experiments/plots}}
 
 \title{Rolling Cointegration Pairs Strategy: \\Theory and Empirical Analysis}
 \author{Lukas Schaller}
@@ -53,9 +54,9 @@ Here no assumptions are made about the distribution of the error term \(\varepsi
 We will assume that the pricing spread \(\varepsilon_t\) is a stationary process meaning that its mean and variance are constant over time.
 Hence, we expect it to revert to its mean \(\mu\) over time when it deviates from it.
 The strategy is to enter the market as soon as a gap between the price $P_t^{A}$ and the linear combination of the price $P_t^{B}$ exceeds a certain threshold.
-We will go long on the asset that is underpriced and short the overpriced asset. As soon as the spread reverts to its mean, we close the position and take the profit.
+We will go long on the asset that is underpriced and short the overpriced asset. As soon as the spread reverts to its mean, we close the position and take the profit. These ideas are extensively studied in the context of pairs trading \parencite{Vidyamurthy2004PairsTrading, Gatev2006PairsTrading}.
 
-\textit{So how to identify the entry and exit points?} 
+\emph{So, how to identify the entry and exit points?} 
 We will use the z-score \(z_t\) of the residuals \(\varepsilon_t\) to determine the entry and exit points.
 Recall that the z-score is defined as
 \[
@@ -90,7 +91,7 @@ Another mechanism is to add an absolute threshold $\varepsilon_{\mathrm{min}}$ t
 This can be very useful for low-volatility regimes, where the z-score even after small movements might be large due to a very small standard deviation.
 
 \subsection{Testing for Stationarity}\label{sec:testing_for_stationarity}
-To test whether the residuals \(\varepsilon_t\) are stationary, one can use the Augmented Dickey-Fuller (ADF) test.
+To test whether the residuals \(\varepsilon_t\) are stationary, one can use the Augmented Dickey-Fuller (ADF) test \parencite{DickeyFuller1979}.
 \paragraph{Augmented Dickey--Fuller test.}
 For a series $x_t$ with mean 0 the ADF regression is
 \[
@@ -109,13 +110,13 @@ is compared against MacKinnon critical values \parencite{MacKinnon2010CriticalVa
 \paragraph{Data sources.}
 \begin{itemize}
   \item \textbf{Exchange-Traded Funds (ETFs).}  Daily close prices were downloaded from \emph{Yahoo Finance} \parencite{yfinance} via the \texttt{yfinance} API in Python.
-  \item \textbf{Cryptocurrencies.}  Daily prices were downloaded from \emph{Binance} \parencite{binance} using the \texttt{ccxt} Python library.
+  \item \textbf{Cryptocurrencies.}  Daily prices were downloaded from \emph{Binance} \parencite{binance} using the \texttt{ccxt} Python library \parencite{ccxt}.
 \end{itemize}
 All series are sampled at a fixed \emph{1-day} interval.\footnote{Higher-frequency data approaches were not studied in this work.} For each asset we retain the most recent
 1000 - 2000 trading days (roughly four to eight trading years), which is sufficient to calculate rolling 60-day estimates while leaving sufficient out-of-sample history for back-testing.
 \paragraph{Data pre-processing.}
 \begin{itemize}
-    \item Prices of an asset pair are stored in a single \texttt{pandas DataFrame} indexed by ISO date, ensuring data alignment.
+    \item Prices of an asset pair are stored in a single \texttt{pandas DataFrame} \parencite{pandas} indexed by ISO date, ensuring data alignment.
     \item No currency conversion is required: both ETF and crypto prices are denominated in U.S. dollars.
 \end{itemize}
 
@@ -253,7 +254,6 @@ Figure \ref{fig:trades_tlt_ief} shows the trades executed by the strategy. In th
 \label{fig:trades_tlt_ief}
 \end{figure}
 
-
 \subsection{ADF as predictor of Sharpe ratio}
 From the theory described in section \ref{sec:testing_for_stationarity} one could expect that the ADF test statistic is a good predictor of the Sharpe ratio of the strategy. Figure \ref{fig:adf_vs_sharpe} shows the ADF test statistic against the total Sharpe ratio for each pair of ETFs on their best set of parameters (by total Sharpe ratio).
 But it is apparent that there is no reason to believe a more negative ADF statistic implies a higher Sharpe ratio. The correlation coefficient is approximately $0.544$ which would suggest a moderate positive relationship between the two variables. A similar picture emerges when looking at the Sharpe ratio during invested days or the difference of Sharpe ratio of the strategy and the 50-50 benchmark.
@@ -311,7 +311,9 @@ Future work could focus on (i) exploring higher-frequency data, (ii) using more 
 \EndFor
 \end{algorithmic}
 \end{algorithm}
+
 \newpage
+
 \section{Additional figures}
 \begin{figure}[htbp]
 \centering
@@ -320,6 +322,19 @@ Future work could focus on (i) exploring higher-frequency data, (ii) using more 
 \label{fig:trades_eem_vwo}
 \end{figure}
 
+\begin{figure}
+\centering
+\includegraphics[width=0.8\linewidth]{EEM_VWO_e2.0_x0.05_w50_f0.0.png}
+\caption{Absolute returns (USD) of the strategy on the pair of ETFs EEM/VWO with parameters $z_{\mathrm{entry}}=2.0$, $z_{\mathrm{exit}}=0.05$, $w=50$, and $\varepsilon_{\min}=0$. Capital-at-risk is 108 USD.}
+\end{figure}
+
+\begin{figure}
+\centering
+\includegraphics[width=0.8\linewidth]{TLT_IEF_e2.0_x0.05_w50_f0.0.png}
+\caption{Absolute returns (USD) of the strategy on the pair of ETFs TLT/IEF with parameters $z_{\mathrm{entry}}=2.0$, $z_{\mathrm{exit}}=0.05$, $w=50$, and $\varepsilon_{\min}=0$. Capital-at-risk is 706 USD.}
+\end{figure}
+
+\clearpage
 \printbibliography
 
 \end{document}
