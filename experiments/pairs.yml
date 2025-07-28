@@ -1,0 +1,47 @@
+- type: etf
+  symbols: [EEM, VWO]
+
+- type: etf
+  symbols: [XLF, XLU]
+
+- type: etf
+  symbols: [IWM, QQQ]
+
+- type: etf
+  symbols: [XLK, XLY]
+
+- type: etf
+  symbols: [TLT, IEF]
+
+# Additional pairs for experiments
+- type: etf
+  symbols: [EWJ, EZU]
+
+- type: etf
+  symbols: [XLE, XLK]
+
+- type: etf
+  symbols: [SHY, TLT]
+
+- type: etf
+  symbols: [GDX, GLD]
+
+- type: etf
+  symbols: [MTUM, SPLV]
+
+- type: etf
+  symbols: [USO, IEF]
+
+# crypto pairs
+
+- type: crypto
+  symbols: [BTC/USDT, ETH/USDT]
+
+- type: crypto
+  symbols: [ETH/USDT, BCH/USDT]
+
+- type: crypto
+  symbols: [SOL/USDT, ADA/USDT]
+
+- type: crypto
+  symbols: [LTC/USDT, DOGE/USDT]
