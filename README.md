@@ -80,4 +80,4 @@ Data via `yfinance` & `ccxt`; analysis in `pandas`, `numpy`, `statsmodels`.
 ---
 
 ### Contact
-Lukas Schaller — [LinkedIn](https://www.linkedin.com/in/lukas-schaller)
+Lukas Schaller — [LinkedIn](www.linkedin.com/in/lukas-schaller)
