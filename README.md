@@ -1,3 +1,5 @@
+![Trading Strategy](experiments/figs/eem_vwo_trades.png)
+
 # coint-pairs-trader 📈
 
 A Python framework for **rolling-window cointegration pairs trading** across ETFs (and optionally cryptocurrencies).
