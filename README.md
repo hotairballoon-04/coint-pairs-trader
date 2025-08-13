@@ -1,6 +1,6 @@
 # coint-pairs-trader 📈
 
-A Python framework for **rolling-window cointegration pairs trading** across ETFs (and optionally cryptocurrencies).
+A Python framework for **rolling-window cointegration pairs trading** across ETFs (and optionally cryptocurrencies). The idea of the algorithm is based on mean-reversion.
 Implements β-neutral hedging, stop-loss logic, parameter analysis, and detailed performance analytics.
 For an introduction read `documentation/main.pdf`.
 
